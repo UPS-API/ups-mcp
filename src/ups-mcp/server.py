@@ -39,4 +39,5 @@ def main():
     mcp.run(transport='stdio')
 
 if __name__ == "__main__":
+    print("Starting UPS MCP Server...")
     main()
