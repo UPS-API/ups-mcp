@@ -1,2 +1,2 @@
-from ups_mcp import main
+from . import main
 main()

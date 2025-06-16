@@ -1,7 +1,7 @@
 from typing import Any
 from mcp.server.fastmcp import FastMCP
 from dotenv import load_dotenv
-import ups_mcp.tools as tools
+from . import tools
 
 # Initialize FastMCP server
 mcp = FastMCP("ups-mcp")
@@ -24,13 +24,7 @@ async def track_package(inquiryNumber: str, locale:str="en_US", returnSignature:
     Returns:
         str: The response from the tracking capability, this is a string of json tracking data.
     """
-    if not inquiryNumber:
-        return "Invalid Inquiry Number, try again"
-    
-    try:
-        tracking_data = tools.track_package(inquiryNum=inquiryNumber, locale=locale, returnSignature=returnSignature, returnMilestones=returnMilestones, returnPOD=returnPOD)
-    except Exception as e:
-        return f"An error occurred while tracking the package: {str(e)}"
+    tracking_data = tools.track_package(inquiryNum=inquiryNumber, locale=locale, returnSignature=returnSignature, returnMilestones=returnMilestones, returnPOD=returnPOD)
 
     return tracking_data
 

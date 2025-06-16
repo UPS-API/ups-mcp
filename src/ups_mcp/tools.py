@@ -3,7 +3,7 @@ from requests.auth import HTTPBasicAuth
 import os
 import uuid
 import json
-import ups_mcp.constants as constants
+from . import constants
 
 BASE_URL = constants.CIE_URL
 
