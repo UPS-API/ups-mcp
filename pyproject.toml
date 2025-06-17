@@ -13,3 +13,6 @@ license-files = ["LICEN[CS]E*"]
 
 [project.urls]
 Homepage = "https://github.com/UPS-API/ups-mcp"
+
+[project.scripts]
+ups-mcp = "ups_mcp.server:main"
