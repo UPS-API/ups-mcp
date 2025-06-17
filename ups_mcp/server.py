@@ -6,6 +6,8 @@ from . import tools
 # Initialize FastMCP server
 mcp = FastMCP("ups-mcp")
 
+tool_manager = tools.ToolManager()
+
 @mcp.tool()
 async def track_package(inquiryNumber: str, locale:str="en_US", returnSignature:bool=False, returnMilestones:bool=False, returnPOD:bool=False) -> str:
     """
@@ -24,7 +26,7 @@ async def track_package(inquiryNumber: str, locale:str="en_US", returnSignature:
     Returns:
         str: The response from the tracking capability, this is a string of json tracking data.
     """
-    tracking_data = tools.track_package(inquiryNum=inquiryNumber, locale=locale, returnSignature=returnSignature, returnMilestones=returnMilestones, returnPOD=returnPOD)
+    tracking_data = tool_manager.track_package(inquiryNum=inquiryNumber, locale=locale, returnSignature=returnSignature, returnMilestones=returnMilestones, returnPOD=returnPOD)
 
     return tracking_data
 
