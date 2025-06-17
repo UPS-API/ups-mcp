@@ -4,55 +4,46 @@ import os
 import uuid
 import json
 from . import constants
+from .authorization import OAuthManager
+from dotenv import load_dotenv
 
-BASE_URL = constants.CIE_URL
+class ToolManager:
+    def __init__(self):
+        load_dotenv()
+        if os.getenv("ENVIRONMENT") == "production":
+            self.base_url = constants.PRODUCTION_URL
+        else:
+            self.base_url = constants.CIE_URL
 
-def track_package(inquiryNum: str, locale: str, returnSignature: str, returnMilestones: str, returnPOD: str):
-    url = f"{BASE_URL}/api/track/v1/details/{inquiryNum}"
+        self.token_manager = OAuthManager(
+            token_url=f"{self.base_url}/security/v1/oauth/token",
+            client_id=os.getenv("CLIENT_ID"),
+            client_secret=os.getenv("CLIENT_SECRET")
+        )
 
-    query = {
-        "locale": locale,
-        "returnSignature": returnSignature,
-        "returnMilestones": returnMilestones,
-        "returnPOD": returnPOD
-    }
+    def track_package(self, inquiryNum: str, locale: str, returnSignature: bool, returnMilestones: bool, returnPOD: bool):
+        url = f"{self.base_url}/api/track/v1/details/{inquiryNum}"
 
-    token = create_token()
+        query = {
+            "locale": locale,
+            "returnSignature": returnSignature,
+            "returnMilestones": returnMilestones,
+            "returnPOD": returnPOD
+        }
 
-    headers = {
-        "transId": str(uuid.uuid4()),
-        "transactionSrc": "Local MCP Server",
-        "Authorization": f"Bearer {token['access_token']}"
-    }
+        token = self.token_manager.get_access_token()
 
-    response = requests.get(url, headers=headers, params=query)
+        headers = {
+            "transId": str(uuid.uuid4()),
+            "transactionSrc": "Local MCP Server",
+            "Authorization": f"Bearer {token}"
+        }
 
-    response = response.text
+        response = requests.get(url, headers=headers, params=query)
 
-    return str(response)
+        if response.status_code != 200:
+            raise ValueError(f"Error tracking package: {response.text}")
 
-def create_token():
-    url = f"{BASE_URL}/security/v1/oauth/token"
+        response = response.text
 
-    clientId = os.getenv("CLIENT_ID")
-    clientSecret = os.getenv("CLIENT_SECRET")
-
-    if not clientId or not clientSecret:
-        raise ValueError("CLIENT_ID and CLIENT_SECRET must be set in environment variables.")
-
-    auth = HTTPBasicAuth(clientId, clientSecret)
-
-    headers = {
-        "Content-Type": "application/x-www-form-urlencoded",
-    }
-
-    data = {
-        "grant_type": "client_credentials",
-    }
-
-    response = requests.post(url, headers=headers, data=data, auth=auth)
-
-    if response.status_code != 200:
-        raise ValueError(f"Error creating token: {response.text}")
-
-    return response.json()
+        return str(response)
