@@ -8,17 +8,13 @@ from .authorization import OAuthManager
 from dotenv import load_dotenv
 
 class ToolManager:
-    def __init__(self):
-        load_dotenv()
-        if os.getenv("ENVIRONMENT") == "production":
-            self.base_url = constants.PRODUCTION_URL
-        else:
-            self.base_url = constants.CIE_URL
+    def __init__(self, base_url, client_id, client_secret):
+        self.base_url = base_url
 
         self.token_manager = OAuthManager(
             token_url=f"{self.base_url}/security/v1/oauth/token",
-            client_id=os.getenv("CLIENT_ID"),
-            client_secret=os.getenv("CLIENT_SECRET")
+            client_id=client_id,
+            client_secret=client_secret
         )
 
     def track_package(self, inquiryNum: str, locale: str, returnSignature: bool, returnMilestones: bool, returnPOD: bool):

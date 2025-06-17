@@ -1,12 +1,24 @@
 from typing import Any
 from mcp.server.fastmcp import FastMCP
 from dotenv import load_dotenv
+import os
 from . import tools
+from . import constants
 
 # Initialize FastMCP server
 mcp = FastMCP("ups-mcp")
 
-tool_manager = tools.ToolManager()
+# Initialize tool manager
+load_dotenv()
+if os.getenv("ENVIRONMENT") == "production":
+    base_url = constants.PRODUCTION_URL
+else:
+    base_url = constants.CIE_URL
+
+client_id = os.getenv("CLIENT_ID")
+client_secret = os.getenv("CLIENT_SECRET")
+
+tool_manager = tools.ToolManager(base_url=base_url, client_id=client_id, client_secret=client_secret)
 
 @mcp.tool()
 async def track_package(inquiryNumber: str, locale:str="en_US", returnSignature:bool=False, returnMilestones:bool=False, returnPOD:bool=False) -> str:
@@ -31,7 +43,6 @@ async def track_package(inquiryNumber: str, locale:str="en_US", returnSignature:
     return tracking_data
 
 def main():
-    load_dotenv()
     print("Starting UPS MCP Server...")
     mcp.run(transport='stdio')
 
