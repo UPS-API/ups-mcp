@@ -14,8 +14,6 @@ Users can integrate with the MCP server to allow AI agents to facilitate trackin
 - ```CLIENT_SECRET``` - UPS Client Secret
 - ```ENVIRONMENT``` - Whether to point to Test (CIE) or Production (Accepted values: test, production)
 
-Environment variables will be loaded from a .env file in the project's root directory.
-
 **Execution**
 
 You can run the package using uvx:
