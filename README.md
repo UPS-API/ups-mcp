@@ -22,10 +22,6 @@ You can run the package using uvx:
 
 ```uvx --from git+https://github.com/UPS-API/ups-mcp ups-mcp```
 
-or if running the code from the root directory of the project:
-
-```uv run -m ups_mcp```
-
 
 ## Popular Integrations
 Here is the config file that works with VS Code, and other MCP Clients 
