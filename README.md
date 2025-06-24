@@ -22,7 +22,7 @@ You can run the package using uvx:
 
 
 ## Popular Integrations
-Here is the config file that works with VS Code, and other MCP Clients 
+Here is the sample config file, different MCP Clients may require modification.
 ```json
 {
   "mcpServers": {
