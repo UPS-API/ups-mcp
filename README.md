@@ -20,8 +20,7 @@ You can run the package using uvx:
 
 ```uvx --from git+https://github.com/UPS-API/ups-mcp ups-mcp```
 
-**Note**
-Your API credentials are sensitive. Do not commit them to version control. We recommend managing secrets securely using GitHub Secrets, a vault, or a password manager.
+**Note**: Your API credentials are sensitive. Do not commit them to version control. We recommend managing secrets securely using GitHub Secrets, a vault, or a password manager.
 
 ## Popular Integrations
 Here is the sample config file, different MCP Clients may require modification.
