@@ -20,6 +20,10 @@ You can run the package using uvx:
 
 ```uvx --from git+https://github.com/UPS-API/ups-mcp ups-mcp```
 
+To use an older version, you can specify the version number like so:
+
+```uvx --from git+https://github.com/UPS-API/ups-mcp@v1.0.0 ups-mcp```
+
 **Note**: Your API credentials are sensitive. Do not commit them to version control. We recommend managing secrets securely using GitHub Secrets, a vault, or a password manager.
 
 ## Popular Integrations
