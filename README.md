@@ -55,5 +55,19 @@ Here is the sample config file, different MCP Clients may require modification.
 
     Returns:
     - str: The response from the tracking capability, this is a string of json tracking data.
+- ```validate_address```: Validate an address using the UPS Address Validation API for the U.S. or Puerto Rico
+    
+    Args:
+     - addressLine1 (str): The primary address details including the house or building number and the street name, e.g. 123 Main St. Required.
+     - addressLine2 (str): Additional information like apartment or suite numbers, e.g. Apt 4B. Not required.
+    - politicalDivision1 (str): The two-letter state or province code, e.g. GA for Georgia. Required.
+    - politicalDivision2 (str): The city or town name, e.g. Springfield. Required.
+    - zipPrimary (str): The postal code. Required.
+    - zipExtended (str): 4 digit Postal Code extension. For US use only. Not required.
+    - urbanization (str): Puerto Rico Political Division 3. Only valid for Puerto Rico. Not required.
+    - countryCode (str): The country code, e.g. US. Required.
+
+    Returns:
+    - str: The json response body from the address validation API
 
 UPS MCP server is still in active development. More tools coming soon!

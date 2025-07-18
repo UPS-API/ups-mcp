@@ -17,6 +17,56 @@ class ToolManager:
             client_secret=client_secret
         )
 
+    def validate_address(self, addressLine1: str, addressLine2: str, politicalDivision1: str, politicalDivision2: str, zipPrimary: str, zipExtended: str, urbanization: str, countryCode: str):
+        url = f"{self.base_url}/api/addressvalidation/v1/1"
+
+        query = {
+            "regionalrequestindicator": False,
+            "maximumcandidatelistsize": 3
+        }
+
+        token = self.token_manager.get_access_token()
+
+        headers = {
+            "transId": str(uuid.uuid4()),
+            "transactionSrc": "Local MCP Server",
+            "Authorization": f"Bearer {token}"
+        }
+
+        addressLineList = [addressLine1]
+
+        if addressLine2:
+            addressLineList.append(addressLine2)
+
+        addressKeyFormat = {
+            "AddressLine": addressLineList,
+            "PoliticalDivision2": politicalDivision2,
+            "PoliticalDivision1": politicalDivision1,
+            "PostcodePrimaryLow": zipPrimary,
+            "CountryCode": countryCode
+        }
+
+        if urbanization:
+            addressKeyFormat["Urbanization"] = urbanization
+
+        if zipExtended:
+            addressKeyFormat["PostcodeExtendedLow"] = zipExtended
+
+        address_payload = {
+            "XAVRequest": {
+                "AddressKeyFormat": addressKeyFormat
+            }
+        }
+
+        response = requests.post(url, headers=headers, params=query, json=address_payload)
+
+        if response.status_code != 200:
+            raise ValueError(f"Error validating address: {response.status_code} {response.text}")
+
+        response = response.text
+
+        return str(response)
+
     def track_package(self, inquiryNum: str, locale: str, returnSignature: bool, returnMilestones: bool, returnPOD: bool):
         url = f"{self.base_url}/api/track/v1/details/{inquiryNum}"
 
