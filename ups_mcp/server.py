@@ -42,9 +42,37 @@ async def track_package(inquiryNumber: str, locale:str="en_US", returnSignature:
 
     return tracking_data
 
+@mcp.tool()
+async def validate_address(addressLine1: str, politicalDivision1: str, politicalDivision2: str, zipPrimary: str, countryCode: str, addressLine2: str="", urbanization: str="", zipExtended: str="") -> str:
+    """
+    Checks addresses against the United States Postal Service database of valid addresses in the U.S. and Puerto Rico.
+
+    Args:
+        addressLine1 (str): The primary address details including the house or building number and the street name, e.g. 123 Main St. Required.
+        addressLine2 (str): Additional information like apartment or suite numbers. E.g. Apt 4B. Optional.
+        politicalDivision1 (str): The two-letter state or province code e.g. GA for Georgia. Required.
+        politicalDivision2 (str): The city or town name, e.g. Springfield. Required.
+        zipPrimary (str): The postal code. Required.
+        zipExtended (str): 4 digit Postal Code extension. For US use only. Optional.
+        urbanization (str): Puerto Rico Political Division 3. Only valid for Puerto Rico. Optional.
+        countryCode (str): The country code, e.g. US. Required.
+
+    Returns:
+        str: A JSON response containing address validation results. The response includes one of three indicators:
+        - ValidAddressIndicator: Address is valid. Contains a 'Candidate' object with the corrected/standardized address including normalized formatting, corrected ZIP codes, and ZIP+4 extensions.
+        - AmbiguousAddressIndicator: Multiple possible address matches found. Review candidates to select the correct address.
+        - NoCandidatesIndicator: Address could not be validated or does not exist in the USPS database.
+    """
+    validation_data = tool_manager.validate_address(addressLine1=addressLine1, addressLine2=addressLine2, politicalDivision1=politicalDivision1, politicalDivision2=politicalDivision2, zipPrimary=zipPrimary, zipExtended=zipExtended, urbanization=urbanization, countryCode=countryCode)
+
+    return validation_data
+
 def main():
     print("Starting UPS MCP Server...")
-    mcp.run(transport='stdio')
+    try:
+        mcp.run(transport='stdio')
+    except KeyboardInterrupt:
+        pass
 
 if __name__ == "__main__":
     main()
